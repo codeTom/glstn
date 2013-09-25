@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    
+    android:orientation="vertical" >
+
+<TableLayout
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:id="@+id/tl"
+    android:stretchColumns="*"
+    
+    >
+	
+    <TableRow
+        android:id="@+id/tableRowT"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp" 
+        >
+        <TextView
+        	 android:id="@+id/title1"
+            android:padding="3dp"
+            android:gravity="center"
+            android:text="Chýbajúci" />
+        
+        <TextView
+            android:id="@+id/title2"
+            android:text="Hodina"
+            android:gravity="center"
+            android:padding="3dp" 
+            />
+        <TextView
+            android:id="@+id/title3"
+            android:padding="3dp"
+            android:gravity="center"
+            android:text="Učebňa" />
+        
+        <TextView
+            android:id="@+id/title4"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="Predmet" />
+        
+ 		<TextView
+ 		     android:padding="3dp"
+            android:id="@+id/title5"
+            android:gravity="center"
+            android:text="Zastupujúci" />  
+        <TextView
+            android:id="@+id/title6"
+             android:padding="3dp"
+             android:text="Poznámka"
+             android:gravity="center" />     
+    </TableRow>
+    <View
+    android:id="@+id/sep1"    
+    android:layout_width="fill_parent"
+    android:layout_height="1dp"
+    android:background="@android:color/darker_gray"/>
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:padding="3dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+         >
+        <TextView
+            android:id="@+id/row1_1"
+            
+            android:text="" />
+        <TextView
+            android:id="@+id/row1_2"
+            
+            android:text="" />
+        <TextView
+            android:id="@+id/row1_3"
+            android:text="" />
+        <TextView
+            android:id="@+id/row1_4"
+            
+            android:text="" />
+ 		<TextView
+            android:id="@+id/row1_5"
+            
+            android:text="" />  
+        <TextView
+            android:id="@+id/row1_6"
+            
+            android:text="" />     
+    </TableRow>
+    <View
+    android:id="@+id/sep2"
+    android:layout_width="fill_parent"
+    android:layout_height="1dp"
+    android:background="@android:color/darker_gray"/>
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp" >
+        <TextView
+            android:id="@+id/row2_1"
+            
+            android:text="" />
+        <TextView
+            android:id="@+id/row2_2"
+            
+            android:text="" />
+        <TextView
+            android:id="@+id/row2_3"
+            
+            android:text="" />
+ 		<TextView
+            android:id="@+id/row2_4"
+            
+            android:text="" />  
+        <TextView
+            android:id="@+id/row2_5"
+            
+            android:text="" /> 
+        <TextView
+            android:id="@+id/row2_6"
+            
+            android:text="" />    
+    </TableRow>
+    <View
+    android:id="@+id/sep3"
+    android:layout_width="fill_parent"
+    android:layout_height="1dp"
+    android:background="@android:color/darker_gray"/>
+    <TableRow
+        android:id="@+id/tableRow3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp" >
+        <TextView
+            android:id="@+id/row3_1"
+            
+            android:text="" />
+        <TextView
+            android:id="@+id/row3_2"
+            
+            android:text="" />
+        <TextView
+            android:id="@+id/row3_3"
+            
+            android:text="" />
+ 		<TextView
+            android:id="@+id/row3_4"
+            
+            android:text="" />  
+        <TextView
+            android:id="@+id/row3_5"
+            
+            android:text="" />     
+    	<TextView
+            android:id="@+id/row3_6"
+            
+            android:text="" />  
+    </TableRow>
+    <View
+    android:id="@+id/sep4"
+    android:layout_width="fill_parent"
+    android:layout_height="1dp"
+    android:background="@android:color/darker_gray"/>
+	<TableRow
+        android:id="@+id/tableRow4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp" >
+        <TextView
+            android:id="@+id/row4_1"
+            
+            android:text="" />
+        <TextView
+            android:id="@+id/row4_2"
+            
+            android:text="" />
+        <TextView
+            android:id="@+id/row4_3"
+            
+            android:text="" />
+ 		<TextView
+            android:id="@+id/row4_4"
+            
+            android:text="" />  
+        <TextView
+            android:id="@+id/row4_5"
+            
+            android:text="" /> 
+        <TextView
+            android:id="@+id/row4_6"
+            
+            android:text="" />      
+    </TableRow>    
+    <View
+    android:id="@+id/sep5"
+    android:layout_width="fill_parent"
+    android:layout_height="1dp"
+    android:background="@android:color/darker_gray"/>
+    <TableRow
+        android:id="@+id/tableRow5"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp" >
+        <TextView
+            android:id="@+id/row5_1"
+            
+            android:text="" />
+        <TextView
+            android:id="@+id/row5_2"
+            
+            android:text="" />
+        <TextView
+            android:id="@+id/row5_3"
+            
+            android:text="" />
+ 		<TextView
+            android:id="@+id/row5_4"
+            
+            android:text="" />  
+        <TextView
+            android:id="@+id/row5_5"
+            
+            android:text="" />     
+        <TextView
+            android:id="@+id/row5_6"
+            
+            android:text="" />  
+    </TableRow>
+    <View
+    android:id="@+id/sep6"
+    android:layout_width="fill_parent"
+    android:layout_height="1dp"
+    android:background="@android:color/darker_gray"/>
+    <TableRow
+        android:id="@+id/tableRow6"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp" >
+        <TextView
+            android:id="@+id/row6_1"
+            
+            android:text="" />
+        <TextView
+            android:id="@+id/row6_2"
+            
+            android:text="" />
+        <TextView
+            android:id="@+id/row6_3"
+            
+            android:text="" />
+ 		<TextView
+            android:id="@+id/row6_4"
+            
+            android:text="" />  
+        <TextView
+            android:id="@+id/row6_5"
+            
+            android:text="" />   
+        <TextView
+            android:id="@+id/row6_6"
+            
+            android:text="" />    
+    </TableRow>
+</TableLayout>
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1" >
+
+<TextView
+            android:id="@+id/oznam"
+            android:padding="3dp"
+            android:text=""
+            android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	
+        	/>    
+</ScrollView>       
+</LinearLayout>
