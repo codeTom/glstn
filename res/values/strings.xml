@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GLSTN Zastupovanie</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="edit_trieda">Trieda</string>
+    <string name="button_dnes">Dnes</string>
+    <string name="button_zajtra">Zajtra</string>
+    <string name="title_activity_zastupovanie">Zastupovanie</string>
+	<string name="chybajuci">Chybajuci</string>
+	<string name="latest">Najnovšie</string>
+</resources>
