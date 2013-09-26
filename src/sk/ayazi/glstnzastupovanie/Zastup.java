@@ -103,7 +103,7 @@ public class Zastup {
         	m=menuTabulka.matcher(page);
         	if(!m.find()){return null;}
         	String tabulka=m.group(1);
-        	m=tabulkaRow.matcher(tabulka);
+	    	m=tabulkaRow.matcher(tabulka);
         	Matcher m2,m3;
         	while(m.find()){
         		m2=tabulkaDen.matcher(m.group(1));        		
