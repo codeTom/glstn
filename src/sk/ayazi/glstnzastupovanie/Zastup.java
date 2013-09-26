@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +26,13 @@ public class Zastup {
 	private Pattern nav=Pattern.compile("zobrazit\\(\"zast_(.*?)\\.htm");
 	private final Pattern men=Pattern.compile("<option value=\"zast_(.*?).htm\">.*?</option>"); 
 	private final Pattern tried=Pattern.compile("<option value=\"rozvrh_tr.*?\\.htm\">(.*?)&nbsp;&nbsp;</option>");
+	//jedlo
+	private final Pattern menuDateRange=Pattern.compile("<h2>Od (.*?) do (.*?)</h2>");
+	private final Pattern menuTabulka=Pattern.compile("<th>Hlavné jedlo</th></tr>(.*?)</tbody>");
+	private final Pattern tabulkaRow=Pattern.compile("<tr style=\"background-color:.*?\">(.*?)</tr>");
+	private final Pattern tabulkaDen=Pattern.compile("<th class=\"v_align r_align\">(.*?)</th>");
+	private final Pattern tabulkaJedlo=Pattern.compile("<td class=\"v_align\">(.*?)</td>\\s*?<td>\\s*?(.*?)\\s*?</td>");
+	
 	private String fpage;
 	private ArrayList<Tr> trs=new ArrayList<Tr>();
 	private boolean noZast;
@@ -38,7 +47,8 @@ public class Zastup {
 		//System.out.print(loadPage("20130211"));
 		Zastup z=new Zastup();
 		Iterator i = z.getClasses().iterator();
-		while(i.hasNext()){System.out.println(i.next());}
+		System.out.println(z.getMenu(new Date(System.currentTimeMillis()))[0]);
+		
 		//z.load("20130211");
 		//ArrayList<Hashtable<String,String>> hts=z.getRelevant("II.B");
 		//Iterator<Hashtable<String,String>> i=hts.iterator();
@@ -63,6 +73,51 @@ public class Zastup {
 		else return "";
 	}
 	
+	
+	public String[] getMenu(Date date) throws IOException{
+		final String[] DNI={"Pondelok","Utorok","Streda","Štvrtok","Piatok"}; 
+		int den=date.getDay();
+		String jedlo[]=new String[2],page="";
+    	URL url=new URL("http://www.gymnaziumtrencin.sk/stravovanie/jedalny-listok.html?page_id=198");
+    	URLConnection c=url.openConnection();
+    	c.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+    	c.connect();
+    	
+    	BufferedReader in = new BufferedReader(
+				new InputStreamReader(c.getInputStream(),Charset.forName("utf8")));
+        String inputLine;
+        while ((inputLine = in.readLine()) != null){
+        	page+=inputLine;}
+        Matcher m=menuDateRange.matcher(page);
+        if(!m.find()){return null;}
+        Date dateend = null;
+        Date datestart = null;
+        try {
+			datestart=new SimpleDateFormat("d.M.yyyy", Locale.ENGLISH).parse(m.group(1));
+			dateend=new SimpleDateFormat("d.M.yyyy", Locale.ENGLISH).parse(m.group(2));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        if(dateend.after(date)&&datestart.before(date)||datestart.equals(date)||dateend.equals(date)){
+        	m=menuTabulka.matcher(page);
+        	if(!m.find()){return null;}
+        	String tabulka=m.group(1);
+        	m=tabulkaRow.matcher(tabulka);
+        	Matcher m2,m3;
+        	while(m.find()){
+        		m2=tabulkaDen.matcher(m.group(1));        		
+        		if(m2.find()&&m2.group(1).equals(DNI[den])){
+        		m3=tabulkaJedlo.matcher(m.group(1));
+        		if(!m3.find()){return null;}
+        		jedlo[0]=m3.group(1).trim();
+        		jedlo[1]=m3.group(2).trim();
+        		return jedlo;
+        		}
+        	}
+        }
+        return null;		
+	}
 	
 	public ArrayList<String[]> getTable(String trieda){
 		ArrayList<String[]> slist=new ArrayList<String[]>();
@@ -226,6 +281,7 @@ public class Zastup {
 	
 	
 	/**method to get next non-weekend day,from system time
+	 * no longer used
 	 * @return next day(Monday-Friday) in a YYYYMMDD format
 	 * */
 	    String getNextDay(){
