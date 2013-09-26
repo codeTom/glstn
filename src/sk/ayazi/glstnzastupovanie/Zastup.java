@@ -107,7 +107,7 @@ public class Zastup {
         	Matcher m2,m3;
         	while(m.find()){
         		m2=tabulkaDen.matcher(m.group(1));        		
-        		if(m2.find()&&m2.group(1).equals(DNI[den])){
+        		if(m2.find()&&m2.group(1).equals(DNI[den-1])){
         		m3=tabulkaJedlo.matcher(m.group(1));
         		if(!m3.find()){return null;}
         		jedlo[0]=m3.group(1).trim();
