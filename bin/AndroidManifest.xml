@@ -37,7 +37,7 @@
         <activity
             android:name="sk.ayazi.glstnzastupovanie.ObedActivity"
             android:label="@string/title_activity_obed"
-            android:parentActivityName="sk.ayazi.glstnzastupovanie.Zastupovanie" >
+            android:parentActivityName="sk.ayazi.glstnzastupovanie.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sk.ayazi.glstnzastupovanie.Zastupovanie" />

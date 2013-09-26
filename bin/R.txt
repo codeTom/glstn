@@ -239,7 +239,8 @@ int id action_menu_presenter 0x7f050017
 int id action_mode_bar 0x7f05002f
 int id action_mode_bar_stub 0x7f05002e
 int id action_mode_close_button 0x7f050022
-int id action_obed 0x7f050081
+int id action_obed 0x7f050082
+int id action_zastup 0x7f050081
 int id activity_chooser_view_content 0x7f050023
 int id always 0x7f05000b
 int id beginning 0x7f050011

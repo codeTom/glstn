@@ -11,8 +11,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,11 +23,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 
-public class ObedActivity extends Activity {
+public class ObedActivity extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		setTitle("Obed "+new SimpleDateFormat("d.m.yyyy").format((Date) getIntent().getExtras().get("date")));
 		setContentView(R.layout.activity_obed);
 		setupActionBar();
 		//Date date=getIntent().getExtras().get("date");
@@ -61,7 +66,14 @@ public class ObedActivity extends Activity {
 			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
-		}
+		}else if(itemId == R.id.action_zastup){//show zastupovanie again
+			String trieda= getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.trieda", null);
+			String datum = getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.datum", null);
+			Intent intent=new Intent(this,Zastupovanie.class);
+			intent.putExtra(MainActivity.TRIEDA, trieda);
+			intent.putExtra(MainActivity.DATUM, datum);
+			startActivity(intent);
+			}
 		return super.onOptionsItemSelected(item);
 	}
 	
@@ -81,8 +93,8 @@ public class ObedActivity extends Activity {
 			
 		}
 		protected void onPostExecute (String[] res){
+			setProgressBarIndeterminateVisibility(false);
 			if(res==null){
-				setProgressBarIndeterminateVisibility(false);
 				new AlertDialog.Builder(ObedActivity.this)
 				.setTitle("Chyba")
 				.setMessage("Chyba")

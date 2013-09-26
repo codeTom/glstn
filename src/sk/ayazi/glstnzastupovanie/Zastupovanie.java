@@ -79,6 +79,7 @@ public class Zastupovanie extends ActionBarActivity {
 		Intent i=getIntent();
 		trieda=i.getStringExtra(MainActivity.TRIEDA);
 		getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).edit().putString("sk.ayazi.glstnzastupovanie.trieda",i.getStringExtra(MainActivity.TRIEDA)).commit();
+		getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).edit().putString("sk.ayazi.glstnzastupovanie.datum",i.getStringExtra(MainActivity.DATUM)).commit();
 		if(i.getStringExtra(MainActivity.DATUM).equals("zajtra")){
 			new GetNext().execute();
 		}else if(i.getStringExtra(MainActivity.DATUM).equals("latest")){
