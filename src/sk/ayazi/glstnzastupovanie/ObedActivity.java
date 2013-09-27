@@ -1,35 +1,34 @@
 package sk.ayazi.glstnzastupovanie;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.Window;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.Window;
+import android.widget.TextView;
 
+@SuppressLint("SimpleDateFormat")
 public class ObedActivity extends ActionBarActivity {
-
+	private JedalnyListok jl;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		jl=new JedalnyListok(getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE));
+
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setTitle("Obed "+new SimpleDateFormat("d.m.yyyy").format((Date) getIntent().getExtras().get("date")));
+		setTitle("Obed "+new SimpleDateFormat("d.M.yyyy").format((Date) getIntent().getExtras().get("date")));
 		setContentView(R.layout.activity_obed);
 		setupActionBar();
 		//Date date=getIntent().getExtras().get("date");
@@ -86,11 +85,12 @@ public class ObedActivity extends ActionBarActivity {
 		@Override
 		protected String[] doInBackground(Date... param) {
 			try{
-			return new Zastup().getMenu(param[param.length-1]);
-				} catch (IOException e) {
-					return null;
+			return jl.getObed(param[param.length-1]);
+			} catch (ObedNotAvailableException e) {
+					// TODO Handle the error somehow
+					e.printStackTrace();
 			}
-			
+			return null;
 		}
 		protected void onPostExecute (String[] res){
 			setProgressBarIndeterminateVisibility(false);

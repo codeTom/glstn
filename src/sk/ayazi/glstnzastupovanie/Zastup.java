@@ -1,9 +1,9 @@
 package sk.ayazi.glstnzastupovanie;
 
+import android.annotation.SuppressLint;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -14,8 +14,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,24 +41,7 @@ public class Zastup {
 	 * @throws Exception 
 	 */
 	
-	public static void main(String[] args) throws Exception {
-		
-		//zast();
-		//System.out.print(loadPage("20130211"));
-		Zastup z=new Zastup();
-		Iterator i = z.getClasses().iterator();
-		System.out.println(z.getMenu(new Date(System.currentTimeMillis()))[0]);
-		
-		//z.load("20130211");
-		//ArrayList<Hashtable<String,String>> hts=z.getRelevant("II.B");
-		//Iterator<Hashtable<String,String>> i=hts.iterator();
-		//while(i.hasNext()){
-		///	Hashtable<String,String> ht= i.next();
-		//	System.out.println(
-	//				ht.get("chybajuci")+":"+ht.get("hodina")+":"+ht.get("predmet")+":"+ht.get("ucebna")+":"+ht.get("zastupujuci")+":"+ht.get("poznamka"));
-	//	}
-	//	System.out.print(z.getOznam());
-	}
+	
 	
 	public void load(String date) throws IOException{
 		trs=new ArrayList<Tr>();
@@ -73,9 +56,72 @@ public class Zastup {
 		else return "";
 	}
 	
+	@SuppressWarnings("deprecation")
+	public TreeMap<Date,String[]> getWeekMenu() throws IOException{
+		TreeMap<Date,String[]> ts=new TreeMap<Date,String[]>();
+		final Hashtable<String,Integer> ht=new Hashtable<String,Integer>();
+		ht.put("Pondelok",1);
+		ht.put("Utorok", 2);
+		ht.put("Streda",3);
+		ht.put("Štvrtok", 4);
+		ht.put("Piatok",5);
+		Calendar cal = Calendar.getInstance();
+		//final String[] DNI={"Pondelok","Utorok","Streda","Štvrtok","Piatok"}; 
+		String jedlo[]=new String[2],page="";
+    	URL url=new URL("http://www.gymnaziumtrencin.sk/stravovanie/jedalny-listok.html?page_id=198");
+    	URLConnection c=url.openConnection();
+    	c.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+    	c.connect();
+    	BufferedReader in = new BufferedReader(
+				new InputStreamReader(c.getInputStream(),Charset.forName("utf8")));
+        String inputLine;
+        while ((inputLine = in.readLine()) != null){
+        	page+=inputLine;}
+        Matcher m=menuDateRange.matcher(page);
+        if(!m.find()){return null;}
+        Date datestart = null;
+        try {
+			datestart=new SimpleDateFormat("d.M.yyyy", Locale.ENGLISH).parse(m.group(1));
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+        m=menuTabulka.matcher(page);
+    	if(!m.find()){return null;}
+    	String tabulka=m.group(1);
+    	m=tabulkaRow.matcher(tabulka);
+    	Matcher m2,m3;
+    	cal.setTime(datestart);
+    	if(!m.find()){return null;}
+    	m2=tabulkaDen.matcher(m.group(1));
+    	if(!m2.find()){return null;}
+       	m3=tabulkaJedlo.matcher(m.group(1));
+		if(m3.find()){
+			jedlo[0]=m3.group(1).trim();
+			jedlo[1]=m3.group(2).trim();
+			ts.put(datestart, jedlo);
+			jedlo=new String[2];
+			}
+		while(m.find()){
+    		m2=tabulkaDen.matcher(m.group(1));        		
+    		if(m2.find()){
+    		Calendar calt=(Calendar) cal.clone();
+    		calt.add(Calendar.DAY_OF_WEEK, ht.get(m2.group(1))-datestart.getDay());
+    		m3=tabulkaJedlo.matcher(m.group(1));
+    		if(m3.find()){
+    			jedlo[0]=m3.group(1).trim();
+    			jedlo[1]=m3.group(2).trim();
+    			ts.put(calt.getTime(),jedlo);
+    			jedlo=new String[2];
+    			}
+    		}
+    	}		
+		return ts;
+	}
 	
 	public String[] getMenu(Date date) throws IOException{
 		final String[] DNI={"Pondelok","Utorok","Streda","Štvrtok","Piatok"}; 
+		@SuppressWarnings("deprecation")
 		int den=date.getDay();
 		String jedlo[]=new String[2],page="";
     	URL url=new URL("http://www.gymnaziumtrencin.sk/stravovanie/jedalny-listok.html?page_id=198");
@@ -355,7 +401,8 @@ public class Zastup {
 	    
 	    /** @return Date reprezentation of YYYYMMDD string
 	     * */
-	    private Date toDate(String date){
+	    @SuppressLint("SimpleDateFormat")
+		private Date toDate(String date){
 	    	try {
 				return new SimpleDateFormat("yyyyMMdd").parse(date);
 			} catch (ParseException e) {
