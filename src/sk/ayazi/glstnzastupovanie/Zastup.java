@@ -27,6 +27,7 @@ public class Zastup {
 	private final Pattern men=Pattern.compile("<option value=\"zast_(.*?).htm\">.*?</option>"); 
 	private final Pattern tried=Pattern.compile("<option value=\"rozvrh_tr.*?\\.htm\">(.*?)&nbsp;&nbsp;</option>");
 	//jedlo
+	private final Pattern menuKomplet=Pattern.compile("<table class=\"obed_menu\" >(.*?)</table>");
 	private final Pattern menuDateRange=Pattern.compile("<h2>Od (.*?) do (.*?)</h2>");
 	private final Pattern menuTabulka=Pattern.compile("<th>Hlavné jedlo</th></tr>(.*?)</tbody>");
 	private final Pattern tabulkaRow=Pattern.compile("<tr style=\"background-color:.*?\">(.*?)</tr>");
@@ -122,7 +123,6 @@ public class Zastup {
 	 * */
 	public String[] getMenu(Date date) throws IOException{
 		final String[] DNI={"Pondelok","Utorok","Streda","Štvrtok","Piatok"}; 
-		@SuppressWarnings("deprecation")
 		int den=date.getDay();
 		String jedlo[]=new String[2],page="";
     	URL url=new URL("http://www.gymnaziumtrencin.sk/stravovanie/jedalny-listok.html?page_id=198");
@@ -307,10 +307,12 @@ public class Zastup {
 		}		
 		return hts;
 	}	
-	
-	public String getLatestMenuHTML() throws IOException{
-		//TODO: finish, add table header
-		String html = null;
+	/** @return [0]=table to display, [1]=datestart, [2]=dateend
+	 * 
+	 * */
+	public String[] getLatestMenuHTML() throws IOException{
+		//TODO: check
+		String[] res=new String[3];
 		String page="";
     	URL url=new URL("http://www.gymnaziumtrencin.sk/stravovanie/jedalny-listok.html?page_id=198");
     	URLConnection c=url.openConnection();
@@ -322,18 +324,14 @@ public class Zastup {
         while ((inputLine = in.readLine()) != null){
         	page+=inputLine;}
         Matcher m=menuDateRange.matcher(page);
-        if(!m.find()){return null;}
-        Date datestart = null;
-        try {
-			datestart=new SimpleDateFormat("d.M.yyyy", Locale.ENGLISH).parse(m.group(1));
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return null;
-		}
-        m=menuTabulka.matcher(page);
-    	if(!m.find()){return null;}
-    	String tabulka=m.group(1);
-		return html;
+        if(!m.find()){System.out.println("dateRange"); return null;}
+        res[1]=m.group(1);
+		res[2]=m.group(2);
+		m=menuKomplet.matcher(page);
+    	if(!m.find()){System.out.println("menuKomplet"); return null;}
+    	res[0]="<table style=\"border-collapse:collapse; \">"+m.group(1).replaceAll(",", ", ")+"</table>";
+		    	
+    	return res;
 	}
 	
 	private String loadPage(String date) throws IOException{
