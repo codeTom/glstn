@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import biz.source_code.base64Coder.Base64Coder;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -28,9 +26,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import biz.source_code.base64Coder.Base64Coder;
 
 
 public class MainActivity extends Activity {
@@ -84,6 +82,7 @@ public class MainActivity extends Activity {
 		startActivity(intent);		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -91,7 +90,6 @@ public class MainActivity extends Activity {
 		try {
 			((TextView) findViewById(R.id.textView4)).setText("Verzia "+getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
 		} catch (NameNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}		
 		SharedPreferences sp=getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE);
@@ -99,7 +97,7 @@ public class MainActivity extends Activity {
 		try {
 			classes=(ArrayList<String>) fromString(sp.getString(TRIEDY,null));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

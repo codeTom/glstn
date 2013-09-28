@@ -1,6 +1,8 @@
 package sk.ayazi.glstnzastupovanie;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,13 +21,14 @@ import android.view.Window;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 
-public class Zastupovanie extends Activity {
+public class Zastupovanie extends ActionBarActivity {
 	private final Zastup z=new Zastup();
 	private final int[] cols={R.id.row1_1,
 			 R.id.row1_2,
@@ -66,6 +69,8 @@ public class Zastupovanie extends Activity {
 	private final int[] seps={R.id.sep1,R.id.sep2,R.id.sep3,R.id.sep4,R.id.sep5,R.id.sep6};
 	private final int[] rows={R.id.tableRow1,R.id.tableRow2,R.id.tableRow3,R.id.tableRow4,R.id.tableRow5,R.id.tableRow6};
 	public String trieda;
+	private Date datum;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,6 +79,7 @@ public class Zastupovanie extends Activity {
 		Intent i=getIntent();
 		trieda=i.getStringExtra(MainActivity.TRIEDA);
 		getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).edit().putString("sk.ayazi.glstnzastupovanie.trieda",i.getStringExtra(MainActivity.TRIEDA)).commit();
+		getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).edit().putString("sk.ayazi.glstnzastupovanie.datum",i.getStringExtra(MainActivity.DATUM)).commit();
 		if(i.getStringExtra(MainActivity.DATUM).equals("zajtra")){
 			new GetNext().execute();
 		}else if(i.getStringExtra(MainActivity.DATUM).equals("latest")){
@@ -106,8 +112,8 @@ public class Zastupovanie extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
+		int itemId = item.getItemId();
+		if (itemId == android.R.id.home) {
 			// This ID represents the Home or Up button. In the case of this
 			// activity, the Up button is shown. Use NavUtils to allow users
 			// to navigate up one level in the application structure. For
@@ -118,7 +124,16 @@ public class Zastupovanie extends Activity {
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
+		else if(itemId==R.id.action_obed){
+			openObed();
+		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private void openObed(){
+		Intent i=new Intent(this,ObedActivity.class);
+		i.putExtra("date", datum);
+		startActivity(i);
 	}
 	
 	boolean isNetworkAvailable() {
@@ -216,6 +231,13 @@ public class Zastupovanie extends Activity {
 			tv=(TextView) findViewById(R.id.oznam);
 			tv.setText(z.getOznam());
 			//title
+			try {
+				datum=new SimpleDateFormat("d.M.yyyy").parse(date.substring(6)+"."+date.substring(4,6)+"."+date.substring(0,4));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+			}
 			setTitle("Zastupovanie " + date.substring(6)+"."+date.substring(4,6)+"."+date.substring(0,4));
 			//progressbar
 			setProgressBarIndeterminateVisibility(false);
