@@ -8,6 +8,8 @@
     <string name="button_dnes">Dnes</string>
     <string name="button_zajtra">Zajtra</string>
     <string name="title_activity_zastupovanie">Zastupovanie</string>
-	<string name="chybajuci">Chybajuci</string>
-	<string name="latest">Najnovšie</string>
+    <string name="chybajuci">Chybajuci</string>
+    <string name="latest">Najnovšie</string>
+    <string name="title_activity_obed">ObedActivity</string>
+
 </resources>
