@@ -118,7 +118,8 @@ public class Zastup {
     	}		
 		return ts;
 	}
-	
+	/** @deprecated use getWeekMenu and store values as changes are unlikely. 
+	 * */
 	public String[] getMenu(Date date) throws IOException{
 		final String[] DNI={"Pondelok","Utorok","Streda","Štvrtok","Piatok"}; 
 		@SuppressWarnings("deprecation")
@@ -142,7 +143,6 @@ public class Zastup {
 			datestart=new SimpleDateFormat("d.M.yyyy", Locale.ENGLISH).parse(m.group(1));
 			dateend=new SimpleDateFormat("d.M.yyyy", Locale.ENGLISH).parse(m.group(2));
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         if(dateend.after(date)&&datestart.before(date)||datestart.equals(date)||dateend.equals(date)){
@@ -308,6 +308,34 @@ public class Zastup {
 		return hts;
 	}	
 	
+	public String getLatestMenuHTML() throws IOException{
+		//TODO: finish, add table header
+		String html = null;
+		String page="";
+    	URL url=new URL("http://www.gymnaziumtrencin.sk/stravovanie/jedalny-listok.html?page_id=198");
+    	URLConnection c=url.openConnection();
+    	c.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+    	c.connect();
+    	BufferedReader in = new BufferedReader(
+				new InputStreamReader(c.getInputStream(),Charset.forName("utf8")));
+        String inputLine;
+        while ((inputLine = in.readLine()) != null){
+        	page+=inputLine;}
+        Matcher m=menuDateRange.matcher(page);
+        if(!m.find()){return null;}
+        Date datestart = null;
+        try {
+			datestart=new SimpleDateFormat("d.M.yyyy", Locale.ENGLISH).parse(m.group(1));
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+        m=menuTabulka.matcher(page);
+    	if(!m.find()){return null;}
+    	String tabulka=m.group(1);
+		return html;
+	}
+	
 	private String loadPage(String date) throws IOException{
 		String page="";
 		URL url=new URL("http://www.glstn.sk/zastupo/zast_"+date+".htm");
@@ -406,7 +434,7 @@ public class Zastup {
 	    	try {
 				return new SimpleDateFormat("yyyyMMdd").parse(date);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			return null;	
