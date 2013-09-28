@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:text="@string/latest"
         android:onClick="showLatest" />
+
       </LinearLayout>
     <!--  <LinearLayout
     		android:layout_width="fill_parent"
@@ -58,6 +59,19 @@
             android:text="Aktuálna verzia na: filipayazi.blogspot.com"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 	  </LinearLayout>-->
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" >
+
+         <Button
+             android:id="@+id/buttonObed"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Najnovší jed. lístok" 
+             android:onClick="showListok"/>
+
+     </LinearLayout>
 
      <LinearLayout
          android:layout_width="match_parent"
@@ -98,6 +112,5 @@
 	     android:text=""
 	     android:textAppearance="?android:attr/textAppearanceSmall" />
 	  </LinearLayout>
-
 
 </LinearLayout>

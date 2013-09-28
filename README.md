@@ -24,7 +24,7 @@ Opravit moc hackove riesenie chyb pri ziskavani zastupovania(nefunguje dobre maj
 Pridat upozornenie na aktualizaciu(nejake nerusive)
 Pridat zobrazenie rozvrhu pre zvolenu triedu.
 ~~Pridat zobrazenie jedalneho listka na zvoleny datum.~~ //uz len drobne upravi vid. origin/dev
-Pridat zobrazenie celeho jedalneho listka na tyzden ako moznost v MainActivity. Asi najlepsie to html dat do webview. Neviem naco to tu pisem, aj tak to nikto citat nebude. 
+~~Pridat zobrazenie celeho jedalneho listka na tyzden ako moznost v MainActivity. Asi najlepsie to html dat do webview. Neviem naco to tu pisem, aj tak to nikto citat nebude. ~~
 ???Pridat moznost odhlasenia z obeda treba poriesit tu captchu na stranke, nejako ju zobrazit a overit, ak niekto vie ako napiste aspon postup ked nie kod, idealne by bolo pouzit to co pouziva script na odhlasenie(s nejakou pridanou bezpecnostou)???
 
 //Other
