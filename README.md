@@ -15,7 +15,7 @@ Dev ma najnovsi pouzitelny kod.
 Kod nie je moc prehladny/dobry - ucil som sa na nom, ak ho budete upratovat komentujte, nech vsetci vedia o co ide.
 TODO:
 VYTVORIT/VYMYSLIET/ZOHNAT IKONU
-
+Opravit tento subor
 //fixes
 *Prerobit system vypisu tabulky, dynamicky ju tvorit nie schovavat, nefunguje pre >6 riadkov.*
 Opravit moc hackove riesenie chyb pri ziskavani zastupovania(nefunguje dobre maju tam byt 3. rozne chyby: pripojenie nedostupne, zastupovanie nenajdene, vyskytla sa chyba)
