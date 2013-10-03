@@ -25,14 +25,14 @@ public class ObedActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		jl=new JedalnyListok(getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE));
-
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setTitle("Obed "+new SimpleDateFormat("d.M.yyyy").format((Date) getIntent().getExtras().get("date")));
+		jl=new JedalnyListok(getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE));
 		setContentView(R.layout.activity_obed);
 		setupActionBar();
-		//Date date=getIntent().getExtras().get("date");
+		
+		setTitle("Obed "+new SimpleDateFormat("d.M.yyyy").format((Date) getIntent().getExtras().get("date")));
 		new GetObed().execute((Date) getIntent().getExtras().get("date"));
+		
 	}
 
 	/**

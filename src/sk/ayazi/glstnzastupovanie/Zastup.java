@@ -311,7 +311,6 @@ public class Zastup {
 	 * 
 	 * */
 	public String[] getLatestMenuHTML() throws IOException{
-		//TODO: check
 		String[] res=new String[3];
 		String page="";
     	URL url=new URL("http://www.gymnaziumtrencin.sk/stravovanie/jedalny-listok.html?page_id=198");
@@ -353,27 +352,21 @@ public class Zastup {
 	
 	
 	/**method to get next non-weekend day,from system time
-	 * no longer used
-	 * @return next day(Monday-Friday) in a YYYYMMDD format
+	 * @return next day(Monday-Friday) date, with 0 time
 	 * */
-	    String getNextDay(){
-	    	Date d=new Date(System.currentTimeMillis());
+	    public Date getNextDay(){
+	       	Date d=new Date();
 			Calendar c=Calendar.getInstance();
 			c.setTime(d);
-			int toNext;
-			switch (c.get(Calendar.DAY_OF_WEEK)){
-				case 6: {toNext=3;break;}
-				case 7: {toNext=2;break;}
-				default: toNext=1;
+			c.add(Calendar.DAY_OF_WEEK, 1);
+			while(c.get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY||c.get(Calendar.DAY_OF_WEEK)==Calendar.SATURDAY){c.add(Calendar.DAY_OF_WEEK,1);}
+			try {
+				return new SimpleDateFormat("dMMyyyy").parse(new SimpleDateFormat("dMMyyyy").format(c.getTime()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return null;
 			}
-			String month=String.valueOf(
-					(c.get(Calendar.MONTH)+1)<10?("0"+(c.get(Calendar.MONTH)+1)):
-				(c.get(Calendar.MONTH)+1));
-			String day=String.valueOf(
-					(c.get(Calendar.DATE)+toNext)<10?("0"+(c.get(Calendar.DATE)+toNext)):
-				(c.get(Calendar.DATE))+toNext);
-	    	return ""+c.get(Calendar.YEAR)+month+day;
-			  }
+			}
 	    
 	    public String getNextAvailable() throws IOException{
 	    	String page="";
