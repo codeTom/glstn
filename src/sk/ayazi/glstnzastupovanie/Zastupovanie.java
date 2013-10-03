@@ -12,7 +12,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.Gravity;
 import android.view.Menu;
@@ -29,6 +28,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 
+@SuppressLint("SimpleDateFormat")
 public class Zastupovanie extends ActionBarActivity {
 	private final Zastup z=new Zastup();
 	private final int[] cols={R.id.row1_1,
@@ -71,7 +71,7 @@ public class Zastupovanie extends ActionBarActivity {
 	private final int[] rows={R.id.tableRow1,R.id.tableRow2,R.id.tableRow3,R.id.tableRow4,R.id.tableRow5,R.id.tableRow6};
 	public String trieda;
 	private Date datum;
-	AsyncTask at;
+	AsyncTask<?, ?, ?> at;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -197,7 +197,7 @@ public class Zastupovanie extends ActionBarActivity {
 				new AlertDialog.Builder(Zastupovanie.this)
 				.setTitle("Chyba")
 				.setMessage("Zastupovanie nenajdene")
-				.setPositiveButton("Späť", new DialogInterface.OnClickListener() {
+				.setPositiveButton("Sp", new DialogInterface.OnClickListener() {
 
 				    @Override
 				    public void onClick(DialogInterface dialog, int which) {
