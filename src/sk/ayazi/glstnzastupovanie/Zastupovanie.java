@@ -22,6 +22,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -70,6 +71,7 @@ public class Zastupovanie extends ActionBarActivity {
 	private final int[] rows={R.id.tableRow1,R.id.tableRow2,R.id.tableRow3,R.id.tableRow4,R.id.tableRow5,R.id.tableRow6};
 	public String trieda;
 	private Date datum;
+	AsyncTask at;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +83,19 @@ public class Zastupovanie extends ActionBarActivity {
 		getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).edit().putString("sk.ayazi.glstnzastupovanie.trieda",i.getStringExtra(MainActivity.TRIEDA)).commit();
 		getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).edit().putString("sk.ayazi.glstnzastupovanie.datum",i.getStringExtra(MainActivity.DATUM)).commit();
 		if(i.getStringExtra(MainActivity.DATUM).equals("zajtra")){
-			new GetNext().execute();
+			at=new GetNext();
+			((GetNext) at).execute();
 		}else if(i.getStringExtra(MainActivity.DATUM).equals("latest")){
-			new GetLatest().execute();
+			at=new GetLatest();
+			((GetLatest) at).execute();
 		}else{fill(i.getStringExtra(MainActivity.DATUM),trieda);}
 		// Show the Up button in the action bar.
 		setupActionBar();
 	}
 	
 	private void fill(final String date, final String trieda){
-		   new GetZast().execute(date,trieda);		
+		   	at=new GetZast();
+			((GetZast)at).execute(date,trieda);		
 	}
 	
 	/**
@@ -125,6 +130,7 @@ public class Zastupovanie extends ActionBarActivity {
 			return true;
 		}
 		else if(itemId==R.id.action_obed){
+			if(at!=null){at.cancel(true);}
 			openObed();
 		}
 		return super.onOptionsItemSelected(item);
@@ -132,7 +138,18 @@ public class Zastupovanie extends ActionBarActivity {
 	
 	private void openObed(){
 		Intent i=new Intent(this,ObedActivity.class);
-		i.putExtra("date", datum);
+		if(datum!=null){
+			i.putExtra("date", datum);
+			
+		}
+		else if(at instanceof GetZast){
+			try {//hack to get current date with 0 time
+				i.putExtra("date", new SimpleDateFormat("dMMyyyy").parse(new SimpleDateFormat("dMMyyyy").format(new Date())));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}//dnesny obed
+		else{i.putExtra("date",z.getNextDay());}
 		startActivity(i);
 	}
 	
@@ -152,19 +169,24 @@ public class Zastupovanie extends ActionBarActivity {
 		}
 		private String date;
 		private Iterator<String[]> ntait=new ArrayList<String[]>().iterator();
+		@SuppressLint("SimpleDateFormat")
 		@Override
 		protected Iterator<String[]> doInBackground(String... arg) {
 			try {
+				date=arg[0];
+				datum=new SimpleDateFormat("yyyyMMdd").parse(date);
 				if(!isNetworkAvailable()){
 					return ntait;
 				}
-				date=arg[0];
 				z.load(arg[0]);
 				ArrayList<String[]> ar=z.getTable(arg[1]);
 				Iterator<String[]> it=ar.iterator();
 				return it;
 			} catch (IOException e) {
 				// handled in onPostExecuted, by it==null
+				return null;
+			} catch (ParseException e) {
+				e.printStackTrace();
 				return null;
 			}
 			
@@ -175,14 +197,20 @@ public class Zastupovanie extends ActionBarActivity {
 				new AlertDialog.Builder(Zastupovanie.this)
 				.setTitle("Chyba")
 				.setMessage("Zastupovanie nenajdene")
-				.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+				.setPositiveButton("Späť", new DialogInterface.OnClickListener() {
 
 				    @Override
 				    public void onClick(DialogInterface dialog, int which) {
 				    	  	startActivity(new Intent(Zastupovanie.this,MainActivity.class));
 				    }
 				})
-				.create()
+				.setNeutralButton("Obed", new DialogInterface.OnClickListener() {
+
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				    	openObed();
+				    }
+				}).create()
 				.show()
 				;
 				return;
@@ -193,13 +221,18 @@ public class Zastupovanie extends ActionBarActivity {
 				new AlertDialog.Builder(Zastupovanie.this)
 				.setTitle("Chyba")
 				.setMessage("Pripojenie nie je dostupné")
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				.setPositiveButton("Späť", new DialogInterface.OnClickListener() {
 				    @Override
 				    public void onClick(DialogInterface dialog, int which) {
 				    	startActivity(new Intent(Zastupovanie.this,MainActivity.class));
 				    }
-				})
-				.create()
+				}).setNeutralButton("Obed", new DialogInterface.OnClickListener() {
+
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				    	openObed();
+				    }
+				}).create()
 				.show();
 				return;
 			}
@@ -271,14 +304,20 @@ public class Zastupovanie extends ActionBarActivity {
 				new AlertDialog.Builder(Zastupovanie.this)
 				.setTitle("Chyba")
 				.setMessage("Vyskytla sa chyba")
-				.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+				.setPositiveButton("Späť", new DialogInterface.OnClickListener() {
 
 				    @Override
 				    public void onClick(DialogInterface dialog, int which) {
 				    	  	startActivity(new Intent(Zastupovanie.this,MainActivity.class));
 				    }
 				})
-				.create()
+				.setNeutralButton("Obed", new DialogInterface.OnClickListener() {
+
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				    	openObed();
+				    }
+				}).create()
 				.show()
 				;
 				return;
@@ -289,10 +328,16 @@ public class Zastupovanie extends ActionBarActivity {
 				new AlertDialog.Builder(Zastupovanie.this)
 				.setTitle("Chyba")
 				.setMessage("Pripojenie nie je dostupne")
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				.setPositiveButton("Späť", new DialogInterface.OnClickListener() {
 				    @Override
 				    public void onClick(DialogInterface dialog, int which) {
 				    	startActivity(new Intent(Zastupovanie.this,MainActivity.class));
+				    }
+				}).setNeutralButton("Obed", new DialogInterface.OnClickListener() {
+
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				    	openObed();
 				    }
 				})
 				.create()
@@ -356,16 +401,23 @@ public class Zastupovanie extends ActionBarActivity {
 			
 		}
 		protected void onPostExecute (String res){
+			if(isCancelled()){return;}
 			if(res==null){
 				setProgressBarIndeterminateVisibility(false);
 				new AlertDialog.Builder(Zastupovanie.this)
 				.setTitle("Chyba")
 				.setMessage("Vyskytla sa chyba")
-				.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+				.setPositiveButton("Späť", new DialogInterface.OnClickListener() {
 
 				    @Override
 				    public void onClick(DialogInterface dialog, int which) {
 				    	  	startActivity(new Intent(Zastupovanie.this,MainActivity.class));
+				    }
+				}).setNeutralButton("Obed", new DialogInterface.OnClickListener() {
+
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				    	openObed();
 				    }
 				})
 				.create()
@@ -379,10 +431,16 @@ public class Zastupovanie extends ActionBarActivity {
 				new AlertDialog.Builder(Zastupovanie.this)
 				.setTitle("Chyba")
 				.setMessage("Pripojenie nie je dostupne")
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				.setPositiveButton("Späť", new DialogInterface.OnClickListener() {
 				    @Override
 				    public void onClick(DialogInterface dialog, int which) {
 				    	startActivity(new Intent(Zastupovanie.this,MainActivity.class));
+				    }
+				}).setNeutralButton("Obed", new DialogInterface.OnClickListener() {
+
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				    	openObed();
 				    }
 				})
 				.create()

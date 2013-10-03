@@ -1,7 +1,6 @@
 package sk.ayazi.glstnzastupovanie;
 
 import java.io.IOException;
-import java.util.Date;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -16,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.webkit.WebView;
-import android.widget.TextView;
 
 public class ObedKomplet extends ActionBarActivity {
 
