@@ -38,6 +38,7 @@ public class MainActivity extends Activity {
 	 public final static String TRIEDY = "sk.ayazi.glstnzastupovanie.TRIEDY";
 	 public final static String LASTUPDATE = "sk.ayazi.glstnzastupovanie.LASTUPDATE";
 	 public final static String NOUPDATE="sk.ayazi.glstnzastupovanie.NOUPDATE";
+	 public final static String LASTUPDATEPROMPT="sk.ayazi.glstnzastupovanie.LASTUDPROMPT";
 	 public final Zastup z=new Zastup();
 	 private static final int MENU_CONTACT = 1;
 	 private static final int MENU_UPDATE = 2;
@@ -50,7 +51,6 @@ public class MainActivity extends Activity {
 		Spinner spinner = (Spinner) findViewById(R.id.spinner_trieda);
 		//EditText editText = (EditText) findViewById(R.id.edit_trieda);
 		String message = String.valueOf(spinner.getSelectedItem());
-		
 		intent.putExtra(TRIEDA, message);
 		Date d=new Date(System.currentTimeMillis());
 		Calendar c=Calendar.getInstance();
@@ -79,7 +79,6 @@ public class MainActivity extends Activity {
 	public void showLatest(View view){
 		Intent intent=new Intent(this,Zastupovanie.class);
 		Spinner spinner = (Spinner) findViewById(R.id.spinner_trieda);
-		//EditText editText = (EditText) findViewById(R.id.edit_trieda);
 		String message = String.valueOf(spinner.getSelectedItem());
 		intent.putExtra(TRIEDA, message);
 		intent.putExtra(DATUM, "latest");
@@ -126,8 +125,6 @@ public class MainActivity extends Activity {
 		spinner.setAdapter(dataAdapter);
 		spinner.setSelection(classes.indexOf(trieda));
 		getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.trieda", "III.B");
-	//	((EditText) findViewById(R.id.edit_trieda)).setText(getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.trieda", "II.B"));
-		
 	}
 	
 	@Override
@@ -230,7 +227,8 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPreExecute (){
 			 }
-		Updater u;	
+		Updater u;
+		boolean force=false;
 		SharedPreferences sp;
 		@Override
 		protected Boolean doInBackground(Boolean... param) {
@@ -238,10 +236,13 @@ public class MainActivity extends Activity {
 				if(param[param.length-1]){
 						//TODO zobrazit dialog, verzia najnovsia ak vynutene z menu
 						sp.edit().putBoolean(NOUPDATE, false).commit();
+						sp.edit().putLong(LASTUPDATEPROMPT, 0).commit();
+						force=true;
 				}
 				sp=getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE);
 				try {
-					if(!isNetworkAvailable()||sp.getBoolean(NOUPDATE,false)){return false;}
+					if(!isNetworkAvailable()||sp.getBoolean(NOUPDATE,false)||(System.currentTimeMillis()-sp.getLong(LASTUPDATEPROMPT,0))<3600000){return false;}
+					
 					u=new Updater();
 				    if(u!=null&&!u.isLatest(version)){
 						return true;
@@ -277,11 +278,23 @@ public class MainActivity extends Activity {
 				    @Override
 				    public void onClick(DialogInterface dialog, int which) {
 				    	sp.edit().putBoolean(NOUPDATE, false).commit();
+				    	sp.edit().putLong(LASTUPDATEPROMPT, System.currentTimeMillis()).commit();
 				    }
 				})
 				.create()
 				.show();				
-			}
+			}else if(force){
+				new AlertDialog.Builder(MainActivity.this)
+				.setTitle("Update")
+				.setMessage("Používate najnovšiu verziu")
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				    @Override
+				    public void onClick(DialogInterface dialog, int which){
+				    	sp.edit().putBoolean(NOUPDATE, false).commit();
+				    }
+				}).create()
+				.show();
+				}
 		}
 	}
 	
@@ -316,8 +329,7 @@ public class MainActivity extends Activity {
 		oos.close();
 		return new String( Base64Coder.encode( baos.toByteArray() ) );}catch(Exception e){e.printStackTrace(); return null;}
 	}
-	private static Object fromString( String s ) throws IOException ,
-    ClassNotFoundException {
+	private static Object fromString( String s ) throws IOException, ClassNotFoundException {
 		if(s==null)return null;
 		byte [] data = Base64Coder.decode( s );
 		ObjectInputStream ois = new ObjectInputStream( 

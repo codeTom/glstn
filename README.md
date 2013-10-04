@@ -3,6 +3,9 @@ glstn
 
 ####Android aplikacia pre zastupovanie a jedalny listok na Gym. L. Stura, Trencin
 
+Verzia 2.0 - automatická aktualizacia, zobrazenie jedalneho listka na den aj najnovsi na tyzden
+Nefunguje pre viac ako 6 zaznamov(zastupovanych hodin) pre triedu -> bude opravene v dalsej verzii.
+
 Aplikacia nie je na Play store kedze registracia stoji $25, preto pre instalaciu aplikacie musite povolit instalaciu z neznamych zdrojov(Nastavenia->Zabezpecenie->Nezname zdroje)
 Akekolvek navrhy su vitane, bud osobne v III.B triede (Filip Ayazi), na email alebo skype.
 

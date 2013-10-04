@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sk.ayazi.glstnzastupovanie"
     android:versionCode="2"
-    android:versionName="2.0-beta.3" >
+    android:versionName="2.0" >
 
     <uses-sdk
         android:minSdkVersion="8"
