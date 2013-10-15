@@ -361,7 +361,7 @@ public class Zastup {
 			c.add(Calendar.DAY_OF_WEEK, 1);
 			while(c.get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY||c.get(Calendar.DAY_OF_WEEK)==Calendar.SATURDAY){c.add(Calendar.DAY_OF_WEEK,1);}
 			try {
-				return new SimpleDateFormat("dMMyyyy").parse(new SimpleDateFormat("dMMyyyy").format(c.getTime()));
+				return new SimpleDateFormat("yyyyMMdd").parse(new SimpleDateFormat("yyyyMMdd").format(c.getTime()));
 			} catch (ParseException e) {
 				e.printStackTrace();
 				return null;
