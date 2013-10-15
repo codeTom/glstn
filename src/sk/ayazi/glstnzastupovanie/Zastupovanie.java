@@ -144,7 +144,7 @@ public class Zastupovanie extends ActionBarActivity {
 		}
 		else if(at instanceof GetZast){
 			try {//hack to get current date with 0 time
-				i.putExtra("date", new SimpleDateFormat("dMMyyyy").parse(new SimpleDateFormat("dMMyyyy").format(new Date())));
+				i.putExtra("date", new SimpleDateFormat("yyyyMMdd").parse(new SimpleDateFormat("yyyyMMdd").format(new Date())));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
