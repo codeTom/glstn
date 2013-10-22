@@ -1,5 +1,6 @@
 package sk.ayazi.glstnzastupovanie;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -85,10 +86,14 @@ public class ObedActivity extends ActionBarActivity {
 		@Override
 		protected String[] doInBackground(Date... param) {
 			try{
-			return jl.getObed(param[param.length-1]);
+				Date date= new SimpleDateFormat("yyyyMMdd").parse(new SimpleDateFormat("yyyyMMdd").format(param[param.length-1]));
+				return jl.getObed(date);
 			} catch (ObedNotAvailableException e) {
 					// TODO Handle the error somehow
 					e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			return null;
 		}
