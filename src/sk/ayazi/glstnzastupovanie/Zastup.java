@@ -29,7 +29,7 @@ public class Zastup {
 	//jedlo
 	private final Pattern menuKomplet=Pattern.compile("<table class=\"obed_menu\" >(.*?)</table>");
 	private final Pattern menuDateRange=Pattern.compile("<h2>Od (.*?) do (.*?)</h2>");
-	private final Pattern menuTabulka=Pattern.compile("<th>Hlavné jedlo</th></tr>(.*?)</tbody>");
+	private final Pattern menuTabulka=Pattern.compile("<th>Hlavné jedlo</th>.*?</tr>(.*?)</tbody>");
 	private final Pattern tabulkaRow=Pattern.compile("<tr style=\"background-color:.*?\">(.*?)</tr>");
 	private final Pattern tabulkaDen=Pattern.compile("<th class=\"v_align r_align\">(.*?)</th>");
 	private final Pattern tabulkaJedlo=Pattern.compile("<td class=\"v_align\">(.*?)</td>\\s*?<td>\\s*?(.*?)\\s*?</td>");
@@ -59,6 +59,7 @@ public class Zastup {
 	
 	@SuppressWarnings("deprecation")
 	public TreeMap<Date,String[]> getWeekMenu() throws IOException{
+		
 		TreeMap<Date,String[]> ts=new TreeMap<Date,String[]>();
 		final Hashtable<String,Integer> ht=new Hashtable<String,Integer>();
 		ht.put("Pondelok",1);
@@ -78,31 +79,35 @@ public class Zastup {
         String inputLine;
         while ((inputLine = in.readLine()) != null){
         	page+=inputLine;}
+        
         Matcher m=menuDateRange.matcher(page);
         if(!m.find()){return null;}
         Date datestart = null;
         try {
 			datestart=new SimpleDateFormat("d.M.yyyy", Locale.ENGLISH).parse(m.group(1));
+			
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return null;
 		}
         m=menuTabulka.matcher(page);
-    	if(!m.find()){return null;}
+        if(!m.find()){return null;}
     	String tabulka=m.group(1);
     	m=tabulkaRow.matcher(tabulka);
     	Matcher m2,m3;
     	cal.setTime(datestart);
-    	if(!m.find()){return null;}
+    	if(!m.find()){System.err.println("1");return null;}
     	m2=tabulkaDen.matcher(m.group(1));
-    	if(!m2.find()){return null;}
+    	if(!m2.find()){System.err.println("1");return null;}
        	m3=tabulkaJedlo.matcher(m.group(1));
+		
 		if(m3.find()){
+			
 			jedlo[0]=m3.group(1).trim();
 			jedlo[1]=m3.group(2).trim();
 			ts.put(datestart, jedlo);
 			jedlo=new String[2];
-			}
+			}else{throw new RuntimeException();}
 		while(m.find()){
     		m2=tabulkaDen.matcher(m.group(1));        		
     		if(m2.find()){
@@ -112,8 +117,10 @@ public class Zastup {
     		if(m3.find()){
     			jedlo[0]=m3.group(1).trim();
     			jedlo[1]=m3.group(2).trim();
+    			
     			ts.put(calt.getTime(),jedlo);
     			jedlo=new String[2];
+    			
     			}
     		}
     	}		
@@ -354,7 +361,8 @@ public class Zastup {
 	/**method to get next non-weekend day,from system time
 	 * @return next day(Monday-Friday) date, with 0 time
 	 * */
-	    public Date getNextDay(){
+	    @SuppressLint("SimpleDateFormat")
+		public Date getNextDay(){
 	       	Date d=new Date();
 			Calendar c=Calendar.getInstance();
 			c.setTime(d);

@@ -51,6 +51,7 @@ public class JedalnyListok {
 	}
 	
 	public String[] getObed(Date date) throws ObedNotAvailableException{
+		
 		if(listok.containsKey(date)){return listok.get(date);}
 		else{
 			try {
@@ -64,6 +65,7 @@ public class JedalnyListok {
 	}
 	
 	private void update() throws IOException{
+		
 		TreeMap<Date,String[]> ts= z.getWeekMenu();
 		if(ts!=null){listok.putAll(ts);}
 		clean();
