@@ -50,6 +50,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sk.ayazi.glstnzastupovanie.MainActivity" />
         </activity>
+        <activity
+            android:name="sk.ayazi.glstnzastupovanie.RozvrhActivity"
+            android:label="@string/title_activity_rozvrh"
+            android:parentActivityName="sk.ayazi.glstnzastupovanie.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sk.ayazi.glstnzastupovanie.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

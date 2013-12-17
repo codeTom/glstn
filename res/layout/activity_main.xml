@@ -71,7 +71,14 @@
              android:text="Najnovší jed. lístok" 
              android:onClick="showListok"/>
 
+     <Button
+        android:id="@+id/buttonRozvrh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rozvrh"
+        android:onClick="getRozvrh" />
      </LinearLayout>
+     
 
      <LinearLayout
          android:layout_width="match_parent"

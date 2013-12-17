@@ -12,5 +12,6 @@
     <string name="latest">Najnovšie</string>
     <string name="title_activity_obed">ObedActivity</string>
     <string name="title_activity_obed_koplet">Najnovší obed</string>
+    <string name="title_activity_rozvrh">Rozvrh</string>
 
 </resources>

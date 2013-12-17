@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -43,7 +45,7 @@ public class MainActivity extends Activity {
 	 private static final int MENU_CONTACT = 1;
 	 private static final int MENU_UPDATE = 2;
 	 private static int failed=0;
-	 static ArrayList<String> classes;
+	 static HashMap<String,String> classes;
 	 String version="";
 	 
 	 public void showDnes(View view){
@@ -82,11 +84,19 @@ public class MainActivity extends Activity {
 		String message = String.valueOf(spinner.getSelectedItem());
 		intent.putExtra(TRIEDA, message);
 		intent.putExtra(DATUM, "latest");
-		startActivity(intent);		
+		startActivity(intent);
 	}
 	
 	public void showListok(View view){
 		Intent intent=new Intent(this,ObedKomplet.class);
+		startActivity(intent);
+	}
+	
+	public void getRozvrh(View view){
+		Intent intent=new Intent(this,RozvrhActivity.class);
+		Spinner spinner = (Spinner) findViewById(R.id.spinner_trieda);
+		String message = String.valueOf(spinner.getSelectedItem());
+		intent.putExtra(TRIEDA, message);
 		startActivity(intent);
 	}
 	
@@ -95,6 +105,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
 		new UpdateTask().execute(false); //update
 		try {
 			version=getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
@@ -105,7 +116,7 @@ public class MainActivity extends Activity {
 		SharedPreferences sp=getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE);
 		String trieda=sp.getString("sk.ayazi.glstnzastupovanie.trieda", "III.B");
 		try {
-			classes=(ArrayList<String>) fromString(sp.getString(TRIEDY,null));
+			classes=(HashMap<String,String>) fromString(sp.getString(TRIEDY,null));
 		} catch (IOException e) {
 			
 			e.printStackTrace();
@@ -117,13 +128,15 @@ public class MainActivity extends Activity {
 		if((System.currentTimeMillis()-lastUpdateTime)>1000000000l&& failed!=1 || classes==null){
 			new GetClasses().execute();
 		}
-		if(classes==null){classes=new ArrayList<String>();classes.add("III.B");}
+		if(classes==null){classes=new HashMap<String,String>();classes.put("III.B","");}
 		Spinner spinner=(Spinner) findViewById(R.id.spinner_trieda);
+		ArrayList<String> so=new ArrayList<String>(classes.keySet());
+		Collections.sort(so);
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, classes);
+				android.R.layout.simple_spinner_item, so);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(dataAdapter);
-		spinner.setSelection(classes.indexOf(trieda));
+		spinner.setSelection(so.indexOf(trieda));
 		getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.trieda", "III.B");
 	}
 	
@@ -167,16 +180,15 @@ public class MainActivity extends Activity {
 	    return activeNetworkInfo != null;
 	}
 	
-	private class GetClasses extends AsyncTask<Void,Void,ArrayList<String>>{
+	private class GetClasses extends AsyncTask<Void,Void,HashMap<String,String>>{
 		@Override
 		protected void onPreExecute (){
 			 setProgressBarIndeterminateVisibility(true);
 		}
 			
 		@Override
-		protected ArrayList<String> doInBackground(Void... param) {
-			
-			try {
+		protected HashMap<String,String> doInBackground(Void... param) {
+				try {
 				if(!isNetworkAvailable()){
 					return null;
 				}
@@ -186,7 +198,8 @@ public class MainActivity extends Activity {
 			}
 			
 		}
-		protected void onPostExecute (ArrayList<String> res){
+		
+		protected void onPostExecute (HashMap<String,String> res){
 			if(res==null){
 				failed=1;
 				setProgressBarIndeterminateVisibility(false);

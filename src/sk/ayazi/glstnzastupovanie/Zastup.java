@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Locale;
@@ -25,7 +26,7 @@ public class Zastup {
 	private Pattern oznp=Pattern.compile("<tr class\\=\"Oznam\">(.*?)</tr>");
 	private Pattern nav=Pattern.compile("zobrazit\\(\"zast_(.*?)\\.htm");
 	private final Pattern men=Pattern.compile("<option value=\"zast_(.*?).htm\">.*?</option>"); 
-	private final Pattern tried=Pattern.compile("<option value=\"rozvrh_tr.*?\\.htm\">(.*?)&nbsp;&nbsp;</option>");
+	private final Pattern tried=Pattern.compile("<option value=\"rozvrh_tr(.*?)\\.htm\">(.*?)&nbsp;&nbsp;</option>");
 	//jedlo
 	private final Pattern menuKomplet=Pattern.compile("<table class=\"obed_menu\" >(.*?)</table>");
 	private final Pattern menuDateRange=Pattern.compile("<h2>Od (.*?) do (.*?)</h2>");
@@ -34,6 +35,7 @@ public class Zastup {
 	private final Pattern tabulkaDen=Pattern.compile("<th class=\"v_align r_align\">(.*?)</th>");
 	private final Pattern tabulkaJedlo=Pattern.compile("<td class=\"v_align\">(.*?)</td>\\s*?<td>\\s*?(.*?)\\s*?</td>");
 	
+	private final Pattern rozvrh=Pattern.compile("<tr><td colspan=\"2\">(.*?)</table>");
 	private String fpage;
 	private ArrayList<Tr> trs=new ArrayList<Tr>();
 	private boolean noZast;
@@ -398,8 +400,28 @@ public class Zastup {
 	    	return pdate;
 	    }
 	    
-	    public ArrayList<String> getClasses() throws IOException{
-	    	ArrayList<String> classes=new ArrayList<String>();
+	    public String simpleRozvrhFetch(String trieda){
+	    	String res;
+	    	try{
+	    		URL url=new URL("http://www.glstn.sk/rozvrh/rozvrh_tr"+trieda+".htm");
+	    		res="";
+	    		BufferedReader in = new BufferedReader(
+	 					new InputStreamReader(url.openStream(),Charset.forName("Cp1250")));
+	 	        String inputLine;
+	 	        while ((inputLine = in.readLine()) != null){
+	 	        	res+=inputLine;}
+	    	}catch(Exception e){return null;}
+			Matcher m=rozvrh.matcher(res);
+			m.find();
+	    	return m.group(1);
+	    }
+	    
+	    public static String getRozvrhURL(String trieda){
+	    	return "http://www.glstn.sk/rozvrh/rozvrh_tr"+trieda+".htm";
+	    }
+	    
+	    public HashMap<String,String> getClasses() throws IOException{
+	    	HashMap<String,String> classes=new HashMap<String,String>();
 	    	URL url=new URL("http://www.glstn.sk/rozvrh/rozvrh_tr_menu.htm");
 		    BufferedReader in = new BufferedReader(
 					new InputStreamReader(url.openStream(),Charset.forName("Cp1250")));
@@ -407,10 +429,10 @@ public class Zastup {
 	        while ((inputLine = in.readLine()) != null){
 	        	page+=inputLine;}
 	        Matcher m=tried.matcher(page);
-	        while(m.find()){classes.add(m.group(1));}
+	        while(m.find()){classes.put(m.group(2),m.group(1));}
 	    	return classes;
 	    }	    
-	    	    
+	   
 	    /**	Get latest zastupovanie available
 	     * */
 	    public String getLatest() throws IOException{
