@@ -8,26 +8,25 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.app.AlertDialog;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Build;
 
 @SuppressLint("SimpleDateFormat")
 public class Zastupovanie extends ActionBarActivity {
@@ -267,7 +266,7 @@ public class Zastupovanie extends ActionBarActivity {
 			}
 			TableLayout tl=(TableLayout) findViewById(R.id.tl);
 			while(i++<6){
-				TableRow tr=new TableRow(Zastupovanie.this);
+				//TableRow tr=new TableRow(Zastupovanie.this);
 				if(it.hasNext()){
 					r=it.next();
 					for(int k=0;k<6;k++){
@@ -282,7 +281,7 @@ public class Zastupovanie extends ActionBarActivity {
 			}
 			if(it.hasNext()){
 				new AlertDialog.Builder(Zastupovanie.this)
-				.setTitle("Príliš vela záznamov")
+				.setTitle("Príliš vela záznamovd")
 				.setMessage("Bolo zistených viac záznamov ako možno zobraziť")
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 				    @Override
