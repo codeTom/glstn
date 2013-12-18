@@ -7,12 +7,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -38,6 +41,7 @@ public class MainActivity extends Activity {
 	 public final static String TRIEDA = "sk.ayazi.glstnzastupovanie.TRIEDA";
 	 public final static String DATUM = "sk.ayazi.glstnzastupovanie.DATUM";
 	 public final static String TRIEDY = "sk.ayazi.glstnzastupovanie.TRIEDY";
+	 public final static String DATE="sk.ayazi.glstnzastupovanie.DATA";
 	 public final static String LASTUPDATE = "sk.ayazi.glstnzastupovanie.LASTUPDATE";
 	 public final static String NOUPDATE="sk.ayazi.glstnzastupovanie.NOUPDATE";
 	 public final static String LASTUPDATEPROMPT="sk.ayazi.glstnzastupovanie.LASTUDPROMPT";
@@ -92,10 +96,16 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	
+	@SuppressLint("SimpleDateFormat")
 	public void getRozvrh(View view){
 		Intent intent=new Intent(this,RozvrhActivity.class);
 		Spinner spinner = (Spinner) findViewById(R.id.spinner_trieda);
 		String message = String.valueOf(spinner.getSelectedItem());
+		try {
+			intent.putExtra(MainActivity.DATE, new SimpleDateFormat("yyyyMMdd").parse(new SimpleDateFormat("yyyyMMdd").format(new Date())));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		intent.putExtra(TRIEDA, message);
 		startActivity(intent);
 	}

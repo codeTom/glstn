@@ -454,8 +454,7 @@ public class Zastup {
 		private Date toDate(String date){
 	    	try {
 				return new SimpleDateFormat("yyyyMMdd").parse(date);
-			} catch (ParseException e) {
-				
+			} catch (ParseException e) {	
 				e.printStackTrace();
 			}
 			return null;	

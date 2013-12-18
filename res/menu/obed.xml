@@ -4,5 +4,7 @@
    <item android:id="@+id/action_zastup"
          android:title="Zastup"
          glstn:showAsAction="ifRoom" />
-	
+	<item android:id="@+id/action_rozvrh"
+         android:title="Rozvrh"
+         glstn:showAsAction="ifRoom" />
 </menu>

@@ -31,8 +31,8 @@ public class ObedActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_obed);
 		setupActionBar();
 		
-		setTitle("Obed "+new SimpleDateFormat("d.M.yyyy").format((Date) getIntent().getExtras().get("date")));
-		new GetObed().execute((Date) getIntent().getExtras().get("date"));
+		setTitle("Obed "+new SimpleDateFormat("d.M.yyyy").format((Date) getIntent().getExtras().get(MainActivity.DATE)));
+		new GetObed().execute((Date) getIntent().getExtras().get(MainActivity.DATE));
 		
 	}
 
@@ -67,13 +67,20 @@ public class ObedActivity extends ActionBarActivity {
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}else if(itemId == R.id.action_zastup){//show zastupovanie again
-			String trieda= getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.trieda", null);
+			//String trieda= getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.trieda", null);
 			String datum = getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.datum", null);
 			Intent intent=new Intent(this,Zastupovanie.class);
-			intent.putExtra(MainActivity.TRIEDA, trieda);
-			intent.putExtra(MainActivity.DATUM, datum);
+			intent.putExtras(getIntent().getExtras());
+			intent.putExtra(MainActivity.DATUM,datum);
 			startActivity(intent);
 			}
+		else if(itemId == R.id.action_rozvrh){//show rozvrh
+				//String trieda= getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.trieda", null);
+				//String datum = getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.datum", null);
+				Intent intent=new Intent(this,RozvrhActivity.class);
+				intent.putExtras(getIntent().getExtras());
+				startActivity(intent);
+				}
 		return super.onOptionsItemSelected(item);
 	}
 	

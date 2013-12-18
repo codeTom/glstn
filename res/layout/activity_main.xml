@@ -27,12 +27,12 @@
         android:layout_height="wrap_content"
         android:text="@string/button_zajtra"
         android:onClick="showZajtra" />
-      <Button
+      <!-- <Button
         android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/latest"
-        android:onClick="showLatest" />
+        android:onClick="showLatest" /> -->
 
       </LinearLayout>
     <!--  <LinearLayout

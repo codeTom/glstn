@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
@@ -132,24 +133,42 @@ public class Zastupovanie extends ActionBarActivity {
 		else if(itemId==R.id.action_obed){
 			if(at!=null){at.cancel(true);}
 			openObed();
-		}
+		}else if(itemId == R.id.action_rozvrh){//show rozvrh
+			String trieda= getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.trieda", null);
+			//String datum = getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.datum", null);
+			System.out.println(datum);
+			Intent intent=new Intent(this,RozvrhActivity.class);
+			intent.putExtra(MainActivity.TRIEDA, trieda);
+			if(datum!=null){
+					intent.putExtra(MainActivity.DATE, datum);
+			}
+			else if(at instanceof GetZast){
+				try {//hack to get current date with 0 time
+					intent.putExtra(MainActivity.DATE, new SimpleDateFormat("yyyyMMdd").parse(new SimpleDateFormat("yyyyMMdd").format(new Date())));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}//dnesny obed
+			else{intent.putExtra(MainActivity.DATE,z.getNextDay());}
+			startActivity(intent);
+			}
 		return super.onOptionsItemSelected(item);
 	}
 	
 	private void openObed(){
 		Intent i=new Intent(this,ObedActivity.class);
 		if(datum!=null){
-			i.putExtra("date", datum);
-			
+			i.putExtra(MainActivity.DATE, datum);
 		}
 		else if(at instanceof GetZast){
 			try {//hack to get current date with 0 time
-				i.putExtra("date", new SimpleDateFormat("yyyyMMdd").parse(new SimpleDateFormat("yyyyMMdd").format(new Date())));
+				i.putExtra(MainActivity.DATE, new SimpleDateFormat("yyyyMMdd").parse(new SimpleDateFormat("yyyyMMdd").format(new Date())));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 		}//dnesny obed
-		else{i.putExtra("date",z.getNextDay());}
+		else{i.putExtra(MainActivity.DATE,z.getNextDay());}
+		i.putExtras(getIntent().getExtras());
 		startActivity(i);
 	}
 	
@@ -248,6 +267,7 @@ public class Zastupovanie extends ActionBarActivity {
 			}
 			TableLayout tl=(TableLayout) findViewById(R.id.tl);
 			while(i++<6){
+				TableRow tr=new TableRow(Zastupovanie.this);
 				if(it.hasNext()){
 					r=it.next();
 					for(int k=0;k<6;k++){
@@ -259,6 +279,19 @@ public class Zastupovanie extends ActionBarActivity {
 					tl.removeView(findViewById(rows[i-1]));
 					if(i!=6) tl.removeView(findViewById(seps[i-1]));
 				}
+			}
+			if(it.hasNext()){
+				new AlertDialog.Builder(Zastupovanie.this)
+				.setTitle("Príliš vela záznamov")
+				.setMessage("Bolo zistených viac záznamov ako možno zobraziť")
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				    	startActivity(new Intent(Zastupovanie.this,MainActivity.class));
+				    }
+				})
+				.create()
+				.show();
 			}
 			//oznam
 			tv=(TextView) findViewById(R.id.oznam);
