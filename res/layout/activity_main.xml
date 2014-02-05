@@ -77,6 +77,12 @@
         android:layout_height="wrap_content"
         android:text="Rozvrh"
         android:onClick="getRozvrh" />
+     <Button
+        android:id="@+id/buttonOdhlasenie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Odhlasenie"
+        android:onClick="showOdhlasenie" />
      </LinearLayout>
      
 

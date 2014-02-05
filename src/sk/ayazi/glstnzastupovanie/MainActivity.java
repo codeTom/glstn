@@ -91,6 +91,14 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 	
+	public void showOdhlasenie(View view){
+		Intent intent=new Intent(this,Odhlasenie.class);
+		Spinner spinner = (Spinner) findViewById(R.id.spinner_trieda);
+		String message = String.valueOf(spinner.getSelectedItem());
+		intent.putExtra(TRIEDA, message);
+		startActivity(intent);
+	}
+	
 	public void showListok(View view){
 		Intent intent=new Intent(this,ObedKomplet.class);
 		startActivity(intent);

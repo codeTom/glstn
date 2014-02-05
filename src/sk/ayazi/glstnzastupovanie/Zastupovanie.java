@@ -160,7 +160,7 @@ public class Zastupovanie extends ActionBarActivity {
 			i.putExtra(MainActivity.DATE, datum);
 		}
 		else if(at instanceof GetZast){
-			try {//hack to get current date with 0 time
+			try {//hack to get current date with no time
 				i.putExtra(MainActivity.DATE, new SimpleDateFormat("yyyyMMdd").parse(new SimpleDateFormat("yyyyMMdd").format(new Date())));
 			} catch (ParseException e) {
 				e.printStackTrace();

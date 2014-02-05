@@ -13,5 +13,6 @@
     <string name="title_activity_obed">ObedActivity</string>
     <string name="title_activity_obed_koplet">Najnovší obed</string>
     <string name="title_activity_rozvrh">Rozvrh</string>
+    <string name="title_activity_odhlasenie">Odhlasenie obeda</string>
 
 </resources>
