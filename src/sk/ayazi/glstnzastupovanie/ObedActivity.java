@@ -80,7 +80,13 @@ public class ObedActivity extends ActionBarActivity {
 				Intent intent=new Intent(this,RozvrhActivity.class);
 				intent.putExtras(getIntent().getExtras());
 				startActivity(intent);
-				}
+		}else if(itemId == R.id.action_odhlasit){//show rozvrh
+					//String trieda= getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.trieda", null);
+					//String datum = getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE).getString("sk.ayazi.glstnzastupovanie.datum", null);
+					Intent intent=new Intent(this,Odhlasenie.class);
+					intent.putExtras(getIntent().getExtras());
+					startActivity(intent);
+					}
 		return super.onOptionsItemSelected(item);
 	}
 	

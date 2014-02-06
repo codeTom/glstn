@@ -7,4 +7,7 @@
 	<item android:id="@+id/action_rozvrh"
          android:title="Rozvrh"
          glstn:showAsAction="ifRoom" />
+	<item android:id="@+id/action_odhlasit"
+         android:title="Odhlasit"
+         glstn:showAsAction="ifRoom" />
 </menu>
