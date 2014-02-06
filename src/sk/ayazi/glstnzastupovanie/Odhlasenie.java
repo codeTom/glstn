@@ -47,6 +47,7 @@ public class Odhlasenie extends Activity {
 		jsi.sp=sp; 
 		WebView wv=(WebView) findViewById(R.id.webOdhlasenie);
 		wv.getSettings().setJavaScriptEnabled(true);
+		wv.getSettings().setBuiltInZoomControls(true);
 		wv.setWebChromeClient(new WebChromeClient());
 		wv.addJavascriptInterface(jsi, "jsi");
 		wv.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
