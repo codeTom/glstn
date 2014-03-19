@@ -14,10 +14,13 @@ import android.net.Uri;
 
 public class Updater {
 	private static final Pattern latestP=Pattern.compile("<a href=\"/codeTom/glstn/releases/download/(.*?)/(.*?)\" rel=\"nofollow\" class=\"button primary\">");
+	private static final Pattern latestM=Pattern.compile("<div class=\"markdown-body\">\\s*<p>(.*?)</p>");
 	private String latest;
+	private String message="";
 	private URL url;	
 	
 	public Updater() throws IOException{
+		
 		String page="";
 		URL url=new URL("https://github.com/codeTom/glstn/releases");
 	    BufferedReader in = new BufferedReader(
@@ -27,6 +30,10 @@ public class Updater {
         Matcher m=latestP.matcher(page);
         if(!m.find()){throw new IOException("Nenajdene");}
         latest=m.group(1).substring(1);
+        Matcher m2=latestM.matcher(page);
+        if(!m2.find()){System.err.println("nenajdene");throw new IOException("Nenajdene");}
+        this.message=m2.group(1);
+        //System.err.println(message);
         this.url=new URL("http://github.com/codeTom/glstn/releases/download/"+m.group(1)+"/"+m.group(2));
         }
 	
@@ -48,5 +55,11 @@ public class Updater {
 		Intent i = new Intent(Intent.ACTION_VIEW,Uri.parse(url.toString()));
 		return i;
 	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	
 	
 }

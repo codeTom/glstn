@@ -275,6 +275,7 @@ public class MainActivity extends Activity {
 					if(!isNetworkAvailable()||sp.getBoolean(NOUPDATE,false)||(System.currentTimeMillis()-sp.getLong(LASTUPDATEPROMPT,0))<3600000){return false;}
 					
 					u=new Updater();
+					
 				    if(u!=null&&!u.isLatest(version)){
 						return true;
 					}
@@ -291,7 +292,7 @@ public class MainActivity extends Activity {
 			if(param){
 				new AlertDialog.Builder(MainActivity.this)
 				.setTitle("Update")
-				.setMessage("Je dostupná novšia verzia")
+				.setMessage("Novšia verzia: "+u.getMessage())
 				.setPositiveButton("Stiahnuť", new DialogInterface.OnClickListener() {
 				    @Override
 				    public void onClick(DialogInterface dialog, int which){
