@@ -123,6 +123,21 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		if((getIntent().getFlags() & Intent.FLAG_ACTIVITY_NEW_TASK)!=0){
+			AlertDialog ad = new AlertDialog.Builder(MainActivity.this)
+			.setTitle("Google play")
+			.setMessage("Aplikacia je uz dostupna na google play, prosim stiahnite ju odtial. Aktualizacia cez github je vypnuta")
+			.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					//	startActivity(new Intent(MainActivity.this,MainActivity.class));
+				}
+			})
+			.create();
+			ad.show();
+			((TextView) ad.findViewById(android.R.id.message)).setGravity(Gravity.CENTER);
+		}
 		
 		//new UpdateTask().execute(false); //update (playstore)
 		try {

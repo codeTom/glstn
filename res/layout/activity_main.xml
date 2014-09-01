@@ -50,13 +50,13 @@
             android:id="@+id/textView1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Návrhy a pripomienky: filipayazi@gmail.com"
+            android:text="aplikacia je google play"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 	 <TextView
             android:id="@+id/textView3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="https://github.com/codetom/glstn"
+            android:text="update cez github je vypnuty"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 	  </LinearLayout>-->
 
