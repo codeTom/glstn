@@ -345,6 +345,7 @@ public class Zastup {
 	private String loadPage(String date) throws IOException{
 		String page="";
 		URL url=new URL("http://www.glstn.sk/zastupo/zast_"+date+".htm");
+		System.out.println("http://www.glstn.sk/zastupo/zast_"+date+".htm");
 	    BufferedReader in = new BufferedReader(
 				new InputStreamReader(url.openStream(),Charset.forName("Cp1250")));
         String inputLine;
@@ -391,7 +392,10 @@ public class Zastup {
 	    	String pdate=null;
 	    	String date=null;
 	    	Matcher m=men.matcher(page);
-	    	if(m==null){return null;}
+	    	if(m==null){
+	    		
+	    		System.err.println("men matcher failed");return null;
+	    		}
 	    	do{ 
 	    		pdate=date;
 	    		if(m.find()){date=m.group(1);d=toDate(date);}

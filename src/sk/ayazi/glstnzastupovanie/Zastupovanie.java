@@ -202,6 +202,7 @@ public class Zastupovanie extends ActionBarActivity {
 				return it;
 			} catch (IOException e) {
 				// handled in onPostExecuted, by it==null
+				e.printStackTrace();
 				return null;
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -281,7 +282,7 @@ public class Zastupovanie extends ActionBarActivity {
 			}
 			if(it.hasNext()){
 				new AlertDialog.Builder(Zastupovanie.this)
-				.setTitle("Príliš vela záznamovd")
+				.setTitle("Príliš vela záznamov")
 				.setMessage("Bolo zistených viac záznamov ako možno zobraziť")
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 				    @Override
@@ -325,6 +326,7 @@ public class Zastupovanie extends ActionBarActivity {
 				}
 				return z.getNextAvailable();
 				} catch (IOException e) {
+					e.printStackTrace();
 				// handled in onPostExecuted, by it==null
 				return null;
 			}
