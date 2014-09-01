@@ -124,7 +124,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		new UpdateTask().execute(false); //update
+		//new UpdateTask().execute(false); //update (playstore)
 		try {
 			version=getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
 			((TextView) findViewById(R.id.textView4)).setText("Verzia "+version);
@@ -143,7 +143,7 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 		Long lastUpdateTime=Long.valueOf(sp.getString(LASTUPDATE, "0"));
-		if((System.currentTimeMillis()-lastUpdateTime)>1000000000l&& failed!=1 || classes==null){
+		if((System.currentTimeMillis()-lastUpdateTime)>200000000l&& failed!=1 || classes==null){//update every few days
 			new GetClasses().execute();
 		}
 		if(classes==null){classes=new HashMap<String,String>();classes.put("III.B","");}
@@ -185,7 +185,7 @@ public class MainActivity extends Activity {
     			ad.show();
     			((TextView) ad.findViewById(android.R.id.message)).setGravity(Gravity.CENTER);
     		}
-    		case MENU_UPDATE:{new UpdateTask().execute(true);}
+    		case MENU_UPDATE:{new GetClasses().execute();}
             return true;
         }
         return false;
@@ -223,7 +223,7 @@ public class MainActivity extends Activity {
 				setProgressBarIndeterminateVisibility(false);
 				new AlertDialog.Builder(MainActivity.this)
 				.setTitle("Chyba")
-				.setMessage("Pripojenie nie je dostupná")
+				.setMessage("Pripojenie nie je dostupné")
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 				    @Override
 				    public void onClick(DialogInterface dialog, int which) {

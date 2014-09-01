@@ -110,7 +110,7 @@
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
           android:gravity="center"
-          android:text="Návrhy/bugy: filipayazi@gmail.com , skype:filip.ayazi"
+          android:text="Bugy: filipayazi@gmail.com , skype:filip.ayazi"
           android:textAppearance="?android:attr/textAppearanceSmall" />
 
 	 <TextView
