@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -139,7 +138,7 @@ public class MainActivity extends Activity {
 			
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		Long lastUpdateTime=Long.valueOf(sp.getString(LASTUPDATE, "0"));
@@ -252,103 +251,6 @@ public class MainActivity extends Activity {
 			
 		}
 		
-	}
-	
-	private class UpdateTask extends AsyncTask<Boolean,Void,Boolean>{
-		@Override
-		protected void onPreExecute (){
-			 }
-		Updater u;
-		boolean force=false;
-		SharedPreferences sp;
-		@Override
-		protected Boolean doInBackground(Boolean... param) {
-			sp=getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE);
-				if(param[param.length-1]){
-						//TODO zobrazit dialog, verzia najnovsia ak vynutene z menu
-						sp.edit().putBoolean(NOUPDATE, false).commit();
-						sp.edit().putLong(LASTUPDATEPROMPT, 0).commit();
-						force=true;
-				}
-				sp=getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE);
-				try {
-					if(!isNetworkAvailable()||sp.getBoolean(NOUPDATE,false)||(System.currentTimeMillis()-sp.getLong(LASTUPDATEPROMPT,0))<3600000){return false;}
-					
-					u=new Updater();
-					
-				    if(u!=null&&!u.isLatest(version)){
-						return true;
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			
-			
-			return false;		
-		}
-		@Override
-		protected void onPostExecute(Boolean param){
-			if(param){
-				new AlertDialog.Builder(MainActivity.this)
-				.setTitle("Update")
-				.setMessage("Novšia verzia: "+u.getMessage())
-				.setPositiveButton("Stiahnuť", new DialogInterface.OnClickListener() {
-				    @Override
-				    public void onClick(DialogInterface dialog, int which){
-				    	new PerformUpdate().execute(u);
-						sp.edit().putBoolean(NOUPDATE, false).commit();
-				    }
-				})
-				.setNegativeButton("Nepripomínať", new DialogInterface.OnClickListener() {
-				    @Override
-				    public void onClick(DialogInterface dialog, int which) {
-				   		sp.edit().putBoolean(NOUPDATE, true).commit();
-						}
-				})
-				.setNeutralButton("Neskôr", new DialogInterface.OnClickListener() {
-				    @Override
-				    public void onClick(DialogInterface dialog, int which) {
-				    	sp.edit().putBoolean(NOUPDATE, false).commit();
-				    	sp.edit().putLong(LASTUPDATEPROMPT, System.currentTimeMillis()).commit();
-				    }
-				})
-				.create()
-				.show();				
-			}else if(force){
-				new AlertDialog.Builder(MainActivity.this)
-				.setTitle("Update")
-				.setMessage("Používate najnovšiu verziu")
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				    @Override
-				    public void onClick(DialogInterface dialog, int which){
-				    	sp.edit().putBoolean(NOUPDATE, false).commit();
-				    }
-				}).create()
-				.show();
-				}
-		}
-	}
-	
-	private class PerformUpdate extends AsyncTask<Updater,Void,Void>{
-		@Override
-		protected void onPreExecute (){
-			 }
-		
-		
-		@Override
-		protected Void doInBackground(Updater... param) {
-				try{
-					startActivity(param[param.length-1].update());				
-				} catch (URISyntaxException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return null;
-		}
-		@Override
-		protected void onPostExecute(Void param){
-		}
 	}
 	
 	//save class list classes private static 
