@@ -14,5 +14,6 @@
     <string name="title_activity_obed_koplet">Najnovší obed</string>
     <string name="title_activity_rozvrh">Rozvrh</string>
     <string name="title_activity_odhlasenie">Odhlasenie obeda</string>
-
+	<string name="title_changelog">Zmeny</string>
+    <string name="changelog_close">Zatvorit</string>
 </resources>

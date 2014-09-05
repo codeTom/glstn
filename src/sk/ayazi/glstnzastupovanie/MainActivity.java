@@ -2,6 +2,7 @@ package sk.ayazi.glstnzastupovanie;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,6 +14,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+
+import com.inscription.ChangeLogDialog;
+import com.inscription.WhatsNewDialog;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -47,6 +51,7 @@ public class MainActivity extends Activity {
 	 public final Zastup z=new Zastup();
 	 private static final int MENU_CONTACT = 1;
 	 private static final int MENU_UPDATE = 2;
+	 private static final int MENU_INFO = 3;
 	 private static int failed=0;
 	 static HashMap<String,String> classes;
 	 String version="";
@@ -122,7 +127,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+		final WhatsNewDialog whatsNewDialog = new WhatsNewDialog(this);
+		whatsNewDialog.show();
 		//new UpdateTask().execute(false); //update (playstore)
 		try {
 			version=getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
@@ -162,6 +168,7 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		menu.add(0, MENU_CONTACT, 0, "Autor");
 		menu.add(0,MENU_UPDATE,1,"Aktualizovať");
+		menu.add(0,MENU_INFO,2,"Info");
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -171,7 +178,7 @@ public class MainActivity extends Activity {
     		case MENU_CONTACT:{
     			AlertDialog ad = new AlertDialog.Builder(MainActivity.this)
 				.setTitle("Autor")
-				.setMessage("Filip Ayazi \n III.B \n filipayazi@gmail.com \n skype:filip.ayazi")
+				.setMessage("Filip Ayazi \n IV.B \n filipayazi@gmail.com \n skype:filip.ayazi")
 				.setPositiveButton("Close", new DialogInterface.OnClickListener() {
 
 				    @Override
@@ -184,7 +191,9 @@ public class MainActivity extends Activity {
     			ad.show();
     			((TextView) ad.findViewById(android.R.id.message)).setGravity(Gravity.CENTER);
     		}
-    		case MENU_UPDATE:{new GetClasses().execute();}
+    		case MENU_UPDATE:{clearCache();new GetClasses().execute();}
+    		case MENU_INFO:{ChangeLogDialog cd = new ChangeLogDialog(this);
+    		cd.show();  }
             return true;
         }
         return false;
@@ -271,5 +280,29 @@ public class MainActivity extends Activity {
 	Object o  = ois.readObject();
 	ois.close();
 	return o;
-}
+	}
+	 public void clearCache() {
+		 try {
+	         File dir = getCacheDir();
+	         if (dir != null && dir.isDirectory()) {
+	            deleteDir(dir);
+	         }
+	      } catch (Exception e) {
+	         // TODO: handle exception
+	      }
+	    }
+
+	    public static boolean deleteDir(File dir) {
+	        if (dir != null && dir.isDirectory()) {
+	            String[] children = dir.list();
+	            for (int i = 0; i < children.length; i++) {
+	                boolean success = deleteDir(new File(dir, children[i]));
+	                if (!success) {
+	                    return false;
+	                }
+	            }
+	        }
+
+	        return dir.delete();
+	    }
 }

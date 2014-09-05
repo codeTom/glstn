@@ -1,10 +1,13 @@
 package sk.ayazi.glstnzastupovanie;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -19,12 +22,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import biz.source_code.base64Coder.Base64Coder;
 
 public class RozvrhActivity extends ActionBarActivity {
 
+	@SuppressLint("SetJavaScriptEnabled")
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +39,27 @@ public class RozvrhActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_rozvrh);
 		Intent i=getIntent();
 		String t=i.getStringExtra(MainActivity.TRIEDA);
+		WebView wv=(WebView) findViewById(R.id.webRozvrh);
 		WebSettings ws=((WebView) findViewById(R.id.webRozvrh)).getSettings();
 		ws.setBuiltInZoomControls(true);
 		ws.setUseWideViewPort(true);
+		ws.setJavaScriptEnabled(true);
+		final String jq=loadJQuery();
+		final String js=loadJS();
+		JSI jsi=new JSI();
+		wv.addJavascriptInterface(jsi, "jsi");
+		wv.setWebViewClient(new WebViewClient(){
+	        public void onPageFinished(WebView view, String url) {
+	            super.onPageFinished(view, url);
+	            view.loadUrl("javascript:"+jq);
+	            view.loadUrl("javascript:"+js);
+	        }
+	        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+	            view.loadUrl(url);
+	            return true;
+	        }
+	        
+	    });
 		// Show the Up button in the action bar.
 		SharedPreferences sp=getApplicationContext().getSharedPreferences("sk.ayazi.glstnzastupovanie", Context.MODE_PRIVATE);
 		HashMap<String,String> classes = null;
@@ -150,5 +174,68 @@ public class RozvrhActivity extends ActionBarActivity {
 	Object o  = ois.readObject();
 	ois.close();
 	return o;
+	}
+		
+	private String loadJQuery(){
+		String js="",s="";
+		try { 
+			BufferedReader br=new BufferedReader(new InputStreamReader(getAssets().open("jquery.js")));
+			while((s=br.readLine())!=null){js+=s;} 
+			//br=new BufferedReader(new InputStreamReader(getAssets().open("odhlasenie.js")));
+			//while((s=br.readLine())!=null){js+=s;}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return js;
+	}
+	
+	private String loadJS(){
+		String js="",s="";
+		try { 
+			BufferedReader br;//=new BufferedReader(new InputStreamReader(getAssets().open("jquery.js")));
+			
+			br=new BufferedReader(new InputStreamReader(getAssets().open("rozvrh.js")));
+			while((s=br.readLine())!=null){js+=s;}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return js;
+	}
+	public class JSI{
+		public String title;
+		@JavascriptInterface
+		public void alert(String ti){
+			this.title=ti;
+			RozvrhActivity.this.runOnUiThread(new Runnable(){
+
+				@Override
+				public void run() {
+				//	log(title);
+					if(title.trim()!=""&&title!=null){
+						new AlertDialog.Builder(RozvrhActivity.this)
+						.setTitle("Popis")
+						.setMessage(title)
+						.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					    	@Override
+					    	public void onClick(DialogInterface dialog, int which) {
+					    	}
+						})
+						.create()
+						.show();
+					}
+					//wv.loadUrl("http://www.glstn.sk/jedalen/odhlasenieformular.php");
+					
+				}
+			});
+			//failedBefore=false;
+			/*Intent i=getIntent();
+			Intent i2=new Intent(Odhlasenie.this,Odhlasenie.class);
+			i2.putExtras(i.getExtras());
+			startActivity(i2);*/
+		}
+		@JavascriptInterface 
+		public void log(String string){
+			System.err.print(string);
+		}
 	}
 }

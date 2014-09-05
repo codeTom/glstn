@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog>
+    <release version="2.0" versioncode="3">
+       <change>Zastupovanie</change>
+       <change>jedalny listok</change>
+    </release>   
+    <release version="2.1" versioncode="4">
+        <change>Opravena chyba pri nacitani obeda</change>
+    
+    </release> 	
+    <release version="2.2" versioncode="5">
+        <change>Zmeny sposobene zmenou stranky</change>
+    </release>   
+    <release version="2." versioncode="6">
+        <change>Zobrazovanie rozvrhu</change>
+    	<change>opravene drobne chyby</change>
+    </release> 
+   <release version="2.6" versioncode="6">
+        <change>Odhlasovanie z obeda uklada udaje z minula</change>
+    
+    </release> 
+     <release version="2.7" versioncode="8">
+        <change>aplikacia presunuta na google play</change>
+    </release> 
+     <release version="2.7.1" versioncode="9">
+        <change>oprava chyb z prechodu na play</change>
+    </release> 
+    <release version="2.8" versioncode="10">
+        <change>Rozvrh ukaze detaily po kliknuti. (napr. na ***)</change>
+        <change>Pridany tento dialog</change>
+        <change>Pridane info v menu</change>
+        <change>Aktualizacia zmaze cache</change>
+    </release> 
+</changelog>

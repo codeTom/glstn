@@ -63,6 +63,8 @@ public class Odhlasenie extends Activity {
 		        }
 		        
 		    });
+		wv.setWebChromeClient(new WebChromeClient());  
+		wv.requestFocusFromTouch();
 		wv.loadUrl("http://www.glstn.sk/jedalen/odhlasenieformular.php");
 		// Show the Up button in the action bar.
 		setupActionBar();
