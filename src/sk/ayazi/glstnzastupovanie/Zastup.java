@@ -81,7 +81,7 @@ public class Zastup {
         String inputLine;
         while ((inputLine = in.readLine()) != null){
         	page+=inputLine;}
-        
+        page=page.replace(".015", ".2015");//fix pre typo na stranke (fakt)
         Matcher m=menuDateRange.matcher(page);
         if(!m.find()){return null;}
         Date datestart = null;
